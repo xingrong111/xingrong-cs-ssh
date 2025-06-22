@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>萍姐你一定要幸福！</title>
+  <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont/style.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url("images/bei3.jpg") no-repeat center center;
+      background-size: cover;
+      background-color: #fff0f5;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Permanent Marker', cursive;
+    }
+
+    .text-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .centered-text {
+        font-size: 93px;
+        color: #fff;
+        text-shadow: 0 0 10px #ff7eb9, 0 0 20px #ff7eb9;
+        animation: breathe 4s ease-in-out infinite;
+    }
+    .tips{
+        font-size: 30px;
+        color: #fff;
+        text-shadow: 0 0 10px #ff7eb9, 0 0 20px #ff7eb9;
+        animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+      }
+    }
+
+    /* 爱心雨 */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      animation: fall 5s linear forwards, sway 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      0% { top: -30px; opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(20px); }
+    }
+
+    span{
+        /*使span元素相对于最近的已定位祖先元素（.container）进行绝对定位*/
+        position:absolute;
+        /*将span元素的左上角定位到.container元素的正中间*/ 
+        top:50%;
+        left:50%;
+        /*设置span元素的宽度和高度为4像素*/
+        width: 4px;
+        height: 4px;
+        /*背景颜色*/
+        background-color: #fff;
+        /*span边框半径设置为50%，使其呈现圆形*/
+        border-radius: 50%;
+        /*添加发光效果*/
+        box-shadow: 0 0 0 4px rgba(255,255,255,0.1),
+        0 0 0 8px rgba(255,255,255,0.1),
+        0 0 20px rgba(255,255,255,1);
+        /*设置动画，动画名称为animate,时长为3秒，线性，无限次循环播放*/
+        animation: animate 3s linear infinite;
+    }
+
+    /*拖尾效果*/
+    span::before{
+        /*伪元素内容为空*/
+        content: "";
+        /*使伪元素相对于span元素进行绝对定位*/
+        position:absolute;
+        /*将伪元素在垂直方向上居中显示*/
+        top: 50%;
+        transform:translateY(-50%);
+        /*设置伪元素的宽度和高度*/
+        width: 300px;
+        height: 3px;
+        /*设置伪元素的背景为水平方向的线性渐变，从白色渐变到透明。*/
+        background: linear-gradient(90deg, pink, transparent);
+    }
+
+    /*接下来分别为每个流星设置位置、动画延迟时间、动画时长*/
+    span:nth-child(1){
+         top:0;
+         right: 0;
+          /*initial关键字用于设置CSS属性为它的初始值*/
+          left: initial;
+          /*动画延迟时间*/
+          animation-delay: 0s;
+          /*动画时长*/
+          animation-duration: 1s;
+      }
+
+        span:nth-child(2){
+            top:0;
+            right: 80px;
+            left: initial;
+            animation-delay: 0.2s;
+            animation-duration: 3s;
+        }
+
+        span:nth-child(3){
+            top:80px;
+            right: 0;
+            left: initial;
+            animation-delay: 0.4s;
+            animation-duration: 2s;
+        }
+
+        span:nth-child(4){
+            top:0;
+            right: 180px;
+            left: initial;
+            animation-delay: 0.6s;
+            animation-duration: 1.5s;
+        }
+
+        span:nth-child(5){
+            top:0;
+            right: 400px;
+            left: initial;
+            animation-delay: 0.8s;
+            animation-duration: 2.5s;
+        }
+
+        span:nth-child(6){
+            top:0;
+            right: 600px;
+            left: initial;
+            animation-delay: 1s;
+            animation-duration: 3s;
+        }
+
+        span:nth-child(7){
+            top:300px;
+            right: 0;
+            left: initial;
+            animation-delay: 1.2s;
+            animation-duration: 1.75s;
+        }
+
+        span:nth-child(8){
+            top:0;
+            right: 700px;
+            left: initial;
+            right: 0;
+            left: 700px;
+            animation-delay: 1.4s;
+            animation-duration: 1.25s;
+        }
+
+        span:nth-child(9){
+            top:0;
+            right: 1000px;
+            left: initial;
+            animation-delay: 0.75s;
+            animation-duration: 2.25s;
+        }
+
+        span:nth-child(10){
+            top:0;
+            right: 450px;
+            left: initial;
+            animation-delay: 2.75s;
+            animation-duration: 2.25s;
+        }
+        span:nth-child(11){
+            top:600px;
+            right: 0;
+            left: 400px;
+            animation-delay: 1.25s;
+            animation-duration: 1s;
+        }
+        span:nth-child(12){
+            top:600px;
+            right: 0;
+            left: 700px;
+            animation-delay: 0.5s;
+            animation-duration: 1s;
+        }
+        span:nth-child(13){
+            top:600px;
+            right: 0;
+            left: 1000px;
+            animation-delay: 1.75s;
+            animation-duration: 0.75s;
+        }
+        span:nth-child(14){
+            top:600px;
+            right: 0;
+            left: 600px;
+            animation-delay: 0.75s;
+            animation-duration: 0.5s;
+        }
+
+        /*定义动画*/
+        /*背景缩放动画*/
+        @keyframes animateBg{  /*定义名为animateBg的动画*/
+            0%, 100%{ /*在画面开始0%和结束100%时，背景图像的缩放比例为1*/
+                transform: scale(1);
+            }
+            50%{  /*在画面进行到50%时，背景图像的缩放比例为1.2*/
+                transform: scale(1.2);
+            }
+        }
+
+        /*流星划过动画*/
+        @keyframes animate{
+            0%{  /*在动画开始时（0%），span元素旋转315°，水平位移为0，透明度为1*/
+                transform: rotate(315deg) translateX(0);
+                opacity: 1;
+            }
+            90%{/*在动画进行到90%时，span元素的透明度为1*/
+                opacity: 1;
+            }
+            100%{/*在动画结束时（100%）span元素旋转315°，水平向左位移为1000px，透明度为0，实现流行划过的效果*/
+                transform: rotate(315deg) translateX(-1000px);
+                opacity: 0;
+            }
+        }
+  </style>
+      <audio id="bgm" src="mp3/music.mp3" autoplay loop></audio>
+</head>
+<body>
+
+  <!-- 中间透明大字 -->
+    <div class="text-wrap">
+      <div class="centered-text">萍姐，你一定一定要幸福！</div>
+      <br>
+      <div class="tips">在你的身后，我们一直都在！</div>
+    </div>
+    <div>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <!-- 爱心雨 -->
+    <script>
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 4 + Math.random() * 2 + "s";
+        heart.style.opacity = Math.random() * 0.8 + 0.2;
+        heart.innerHTML = `
+          <svg viewBox="0 0 32 29.6" width="20" height="20" fill="pink">
+            <path d="M23.6,0c-3.4,0-6.4,2.2-7.6,5.3C14.8,2.2,11.8,0,8.4,0
+            C3.8,0,0,3.8,0,8.4c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2
+            C32,3.8,28.2,0,23.6,0z"/>
+          </svg>`;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+      setInterval(createHeart, 20);
+      document.addEventListener('DOMContentLoaded', function () {
+              // 当用户点击页面任意地方，开始播放背景音乐
+              document.body.addEventListener('click', function () {
+              const bgm = document.getElementById('bgm');
+              if (bgm) {
+                  bgm.play().catch((e) => {
+                  console.log("播放失败：", e);
+                  });
+              }
+              }, { once: true }); // 确保只执行一次
+          });
+    </script>
+
+</body>
+</html>

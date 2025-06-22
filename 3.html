@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 2</title>
+    <style>
+        body{
+            min-height: 100vh;
+            background: url("images/bei3.jpg") no-repeat center;
+            font-family: "LXGW WenKai", cursive;
+            background-size: cover;
+            overflow: hidden;
+            position: relative; /* 为绝对定位提供参考（若需要） */
+            margin: 0;
+            background-color: #fff0f5;
+        }
+        .text-wrap {
+            position: relative;
+            z-index: 10;
+            /* 让内部文字水平居中 */
+            text-align: center; 
+            padding-top: 15vh;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+        /* 按钮组容器：相对于文字容器定位 */
+        .button-group {
+            display: flex;
+            flex-direction: column; 
+            align-items: center; /* 按钮水平居中 */
+            gap: 30px; /* 按钮之间的垂直间隔 */
+            z-index: 10;
+            margin-top: 2vh;
+            }
+        button {
+            width: 400px;
+            height: 74px;
+            padding: 10px 20px;
+            font-size: 25px;
+            color: plum;
+            font-family: 'Permanent Marker', cursive;
+            animation: breathe 2s ease-in-out infinite;
+            border-radius: 25px; 
+            background-color: #ff7eb9;
+            color: pink;
+            border: 2px solid #ff7eb9;
+            box-shadow: 0 0 10px rgb(19, 10, 11);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        button:hover{
+            transform: scale(1.1);
+            box-shadow: 0 0 20px pink;
+        }
+
+        /*爱心雨动画*/
+        .heart {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                animation: fall 5s linear forwards, sway 2s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+        @keyframes fall {
+                0% {
+                    top: -30px;
+                    opacity: 1;
+                }
+                100% {
+                    top: 100vh;
+                    opacity: 0;
+                }
+            }
+
+        @keyframes sway {
+                0% {
+                    transform: translateX(0px);
+                }
+                50% {
+                    transform: translateX(20px);
+                }
+                100% {
+                    transform: translateX(0px);
+                }
+            }
+
+        #customAlert {
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(255, 192, 203, 0.6); /* 粉红色半透明背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #alertBox {
+            background-color: pink;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 30px hotpink;
+            font-size: 22px;
+            max-width: 80vw;
+            width: 600px;
+            color: white;
+            font-family: "LXGW WenKai", cursive;
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        #alertBox button {
+            margin-top: 30px;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 15px;
+            background-color: hotpink;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        span{
+            /*使span元素相对于最近的已定位祖先元素（.container）进行绝对定位*/
+            position:absolute;
+            /*将span元素的左上角定位到.container元素的正中间*/
+            top:50%;
+            left:50%;
+            /*设置span元素的宽度和高度为4像素*/
+            width: 4px;
+            height: 4px;
+            /*背景颜色*/
+            background-color: #fff;
+            /*span边框半径设置为50%，使其呈现圆形*/
+            border-radius: 50%;
+            /*添加发光效果*/
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.1),
+            0 0 0 8px rgba(255,255,255,0.1),
+            0 0 20px rgba(255,255,255,1);
+            /*设置动画，动画名称为animate,时长为3秒，线性，无限次循环播放*/
+            animation: animate 3s linear infinite;
+        }
+
+        /*拖尾效果*/
+        span::before{
+            /*伪元素内容为空*/
+            content: "";
+            /*使伪元素相对于span元素进行绝对定位*/
+            position:absolute;
+            /*将伪元素在垂直方向上居中显示*/
+            top: 50%;
+            transform:translateY(-50%);
+            /*设置伪元素的宽度和高度*/
+            width: 300px;
+            height: 3px;
+            /*设置伪元素的背景为水平方向的线性渐变，从白色渐变到透明。*/
+            background: linear-gradient(90deg, pink, transparent);
+        }
+
+        /*接下来分别为每个流星设置位置、动画延迟时间、动画时长*/
+        span:nth-child(1){
+            top:0;
+            right: 0;
+            /*initial关键字用于设置CSS属性为它的初始值*/
+            left: initial;
+            /*动画延迟时间*/
+            animation-delay: 0s;
+            /*动画时长*/
+            animation-duration: 1s;
+        }
+
+        span:nth-child(2){
+            top:0;
+            right: 80px;
+            left: initial;
+            animation-delay: 0.2s;
+            animation-duration: 3s;
+        }
+
+        span:nth-child(3){
+            top:80px;
+            right: 0;
+            left: initial;
+            animation-delay: 0.4s;
+            animation-duration: 2s;
+        }
+
+        span:nth-child(4){
+            top:0;
+            right: 180px;
+            left: initial;
+            animation-delay: 0.6s;
+            animation-duration: 1.5s;
+        }
+
+        span:nth-child(5){
+            top:0;
+            right: 400px;
+            left: initial;
+            animation-delay: 0.8s;
+            animation-duration: 2.5s;
+        }
+
+        span:nth-child(6){
+            top:0;
+            right: 600px;
+            left: initial;
+            animation-delay: 1s;
+            animation-duration: 3s;
+        }
+
+        span:nth-child(7){
+            top:300px;
+            right: 0;
+            left: initial;
+            animation-delay: 1.2s;
+            animation-duration: 1.75s;
+        }
+
+        span:nth-child(8){
+            top:0;
+            right: 700px;
+            left: initial;
+            right: 0;
+            left: 700px;
+            animation-delay: 1.4s;
+            animation-duration: 1.25s;
+        }
+
+        span:nth-child(9){
+            top:0;
+            right: 1000px;
+            left: initial;
+            animation-delay: 0.75s;
+            animation-duration: 2.25s;
+        }
+
+        span:nth-child(10){
+            top:0;
+            right: 450px;
+            left: initial;
+            animation-delay: 2.75s;
+            animation-duration: 2.25s;
+        }
+        span:nth-child(11){
+            top:600px;
+            right: 0;
+            left: 400px;
+            animation-delay: 1.25s;
+            animation-duration: 1s;
+        }
+        span:nth-child(12){
+            top:600px;
+            right: 0;
+            left: 700px;
+            animation-delay: 0.5s;
+            animation-duration: 1s;
+        }
+        span:nth-child(13){
+            top:600px;
+            right: 0;
+            left: 1000px;
+            animation-delay: 1.75s;
+            animation-duration: 0.75s;
+        }
+        span:nth-child(14){
+            top:600px;
+            right: 0;
+            left: 600px;
+            animation-delay: 0.75s;
+            animation-duration: 0.5s;
+        }
+
+        /*定义动画*/
+        /*背景缩放动画*/
+        @keyframes animateBg{  /*定义名为animateBg的动画*/
+            0%, 100%{ /*在画面开始0%和结束100%时，背景图像的缩放比例为1*/
+                transform: scale(1);
+            }
+            50%{  /*在画面进行到50%时，背景图像的缩放比例为1.2*/
+                transform: scale(1.2);
+            }
+        }
+
+        /*流星划过动画*/
+        @keyframes animate{
+            0%{  /*在动画开始时（0%），span元素旋转315°，水平位移为0，透明度为1*/
+                transform: rotate(315deg) translateX(0);
+                opacity: 1;
+            }
+            90%{/*在动画进行到90%时，span元素的透明度为1*/
+                opacity: 1;
+            }
+            100%{/*在动画结束时（100%）span元素旋转315°，水平向左位移为1000px，透明度为0，实现流行划过的效果*/
+                transform: rotate(315deg) translateX(-1000px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: scale(1.05); 
+                opacity: 0.9; 
+            }
+        }
+        .floating-buttons {
+            position: fixed;
+            top: 10vh;
+            left: 5vw;
+            width: 90vw;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 35px;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .floating-buttons button {
+            flex: 1 1 calc(45% -10px);/* 每行最多两个，留出间距 */
+            max-width: 180px;  /*最大宽度*/
+            min-width: 120px; /*最小宽度*/
+            height: 60px;
+            font-size: clamp(16px, 4vw, 20px); /* 响应字体大小 */
+        }
+        </style>
+    <!-- 自定义粉色弹窗 -->
+    <div id="customAlert" style="display: none;">
+        <div id="alertBox">
+        <p id="alertMessage"></p>
+        <button onclick="closeAlert()">确定</button>
+        </div>
+    </div>
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont/style.css" rel="stylesheet">
+    <audio id="bgm" src="mp3/music.mp3" autoplay loop></audio>
+    <!--<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap" rel="stylesheet">-->
+</head>
+<body>
+    <div class="floating-buttons">
+        <button data-key="bjx" onclick="handleClick(this)">白家欣</button>
+        <button data-key="jt" onclick="handleClick(this)">姜涛</button>
+        <button data-key="yjl" onclick="handleClick(this)">闫婧蕾</button>
+        <button data-key="zkx" onclick="handleClick(this)">张可欣</button>
+        <button data-key="cxs" onclick="handleClick(this)">曹鑫硕</button>
+        <button data-key="zs" onclick="handleClick(this)">张硕</button>
+        <button data-key="gxd" onclick="handleClick(this)">高希顿</button>
+        <button data-key="lly" onclick="handleClick(this)">刘力源</button>
+        <button data-key="wyj" onclick="handleClick(this)">武胤吉</button>
+        <button data-key="jyh" onclick="handleClick(this)">冀禹豪</button>
+        <button data-key="cyx" onclick="handleClick(this)">曹雨萱</button>
+        <button data-key="fjl" onclick="handleClick(this)">房俊丽</button>
+        <button data-key="ysy" onclick="handleClick(this)">杨诗怡</button>
+        <button data-key="lys" onclick="handleClick(this)">李依森</button>
+        <button data-key="hqk" onclick="handleClick(this)">郝千恺</button>
+        <button data-key="wyx" onclick="handleClick(this)">王雨轩</button>
+        <button data-key="zym" onclick="handleClick(this)">张一曼</button>
+        <button data-key="zry" onclick="handleClick(this)">张润钰</button>
+        <button data-key="lty" onclick="handleClick(this)">李甜雨</button>
+        <button data-key="wjr" onclick="handleClick(this)">武家冉</button>
+        <button data-key="ybx" onclick="handleClick(this)">杨博璇</button>
+        <button data-key="zzh" onclick="handleClick(this)">张紫涵</button>
+        <button data-key="zy" onclick="handleClick(this)">张优</button>
+        <button data-key="yyh" onclick="handleClick(this)">杨禹航</button>
+        <button data-key="gjy" onclick="handleClick(this)">郭静钇</button>
+        <button data-key="hym" onclick="handleClick(this)">韩雨萌</button>
+        <button data-key="wzt" onclick="handleClick(this)">王梓桐</button>
+        <button data-key="fmy" onclick="handleClick(this)">付明宇</button>
+        <button data-key="wrx" onclick="handleClick(this)">王瑞鑫</button>
+        <button data-key="dsq" onclick="handleClick(this)">段思琦</button>
+        <button data-key="ygl" onclick="handleClick(this)">杨甘霖</button>
+        <button data-key="zyh" onclick="handleClick(this)">张宇航</button>
+    </div>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span> 
+    <script>
+        const messages = {
+            bjx:"萍姐，整个高中最开心的应该就是当你的学生了吧🎇🎇,是你察觉到了我初入160时的不适应,耐心温柔的给我提出应对困难的方法,也是在你的鼓励下,我敢于追着老师问题，不管是怎样的问题，敢于在课堂上大胆的发言说出自己的想法，向老师提出质疑，敢于在班级纪律混乱的时候“挺身而出”，站在讲台上“侃侃而谈”,总之有很多的“不敢到敢”都是萍姐你让我突破尝试的👍，没有萍姐就没有我高中三年的赞美和荣誉。还记得在疫情时你给我们理发，有多学的机会总记得给我，每次考前的鼓励，考后的安慰与夸奖，还记得那句“俺白家欣就是要考第一的”，在高二分班的时候一直鼓励着我不放弃，咬牙坚持，在你的镜头里我没办法做到不比耶✌、不露牙笑，高三的时候仍没分到你的班里，但是在一层楼，晚上放学的时候碰到了，你也会很温柔的给我打招呼，烦躁的心情就会消失，即使我是在对子班，你也会无时无刻的不在鼓励着我，你的一句“清北之光”我真的会一直记得,你鼓励我的每一句话都是我学生时代的“糖果🍬”，我们温柔善良美丽快乐不服输的萍姐也找到了属于自己的幸福，无作他念，惟愿我们萍姐新婚快乐🎉，一生幸福，桃李满园，永远温柔善良，笑口常开。爱你爱你爱你，一直爱你，我的萍姐！",
+            jt:"萍姐，还记得最初见到您时，您在宿舍楼道大喊大叫，对你的初印象是:是一个宿管，但是心想哪有那么年轻漂亮的人来当宿管呢，还是说衡分实行全员年轻化？后来上了您的政治课之后才知道您原来是个老师（嘻嘻），随着后来选择物化政，分到了160，我们的缘分自此刻开始，之后您又选我为班长，起初还没有做好心理准备只能草草接受，后来发现班长职位给了我与您多接触的机会，随着我对您的了解加深，我发现您并非其他学生说得那样冷酷无情，后来发现挺喜欢您这个老师的，您是我高中最喜欢的老师，🌼喜欢您每堂课上认真详细的讲解；🌼喜欢您对犯错的我的批评与惩戒；🌼喜欢您每次对受挫的我的安慰与鼓励；🌼喜欢您为了班级而尽心尽力，🌼喜欢您每时每刻的陪伴。三年来，您看着我们成长，我们也经历了您的成长，如今您与爱人步入婚姻殿堂，涛子祝您们能一生相守，幸福美满，白头偕老。也祝萍姐在未来的日子里能事业有成，永远开心✨。 ❤",
+            yjl:"只记得高一跟你袒露内心说想选物化政，于是就到了你的班⭐，很开心成为你的班长，一下就是三年，有幸见证你的幸福🥰，萍姐要一直开开心心幸福下去哟! 🌼",
+            zkx:"琴瑟和鸣，佳偶天成！缘分让你们相遇相知，真情让你们相守相伴。愿你们的爱情如美酒，历久弥香🥰；如星辰⭐，恒久璀璨。在人生的旅途上，愿你们心手相牵，眼中有光，心中有爱，共同编织一段温暖而动人的幸福故事。祝福无限！🐝",
+            cxs:"萍姐，得知您披上婚纱👰，满心温暖感动。讲台上的萍姐，曾用智慧与温柔为我们的高中青春点灯，您在我们身上倾注的心血，承载着我们共同的记忆。如今，我真心为您找到共度余生的良人而欣喜🥰，愿您这位温暖无数心灵的摆渡人🐏，往后余生尽是繁花🌼，幸福恒久！祝萍姐新婚快乐！！！",
+            zs:"亲爱的萍姐，虽然您的婚礼盛典我因为一些原因没有前去，但还是为您感到很开心🥰！我也很感慨时光过得飞快，仿佛昨天还是第一次来您的班，第一次见到您，尽管您一直对我们以严格的要求来管理，我们有时也会抱怨，可是如今想来，我们又是多么感谢您能陪伴我们将近三年！⭐高中再也回不去，您的课堂我们也回不去，但是我们现在仍然亦师亦友，甚至是亲密无比的亲人☀，我们都为您的婚礼感到开心，我们都在为您送上最真挚的祝福，我也希望您和薛哥永远开心快乐 相爱永远🥰，也祝你们工作顺利❤",
+            gxd:"to 萍姐:得知您的新婚👰，身为学生的我非常欣慰也非常高兴，您是在高二带我陪了我两年，我那时候有很多的缺点，感谢你在为人处世上对我的教导和指正，以及在政治学习上对我的帮助，希望您今后能够平衡好工作与生活，多微笑☺少生气，互相理解，一定要幸福🥰！",
+            lly:"亲爱的李萍老师，高中时在您的课堂上，我学到的不仅是政治理论，更是对生活的通透与热爱🌳。很幸运能成为您的学生，在您的谆谆教导中成长。如今得知您即将步入婚姻殿堂👰，我满心都是喜悦与祝福✨！愿您和另一半在以后日子中，既有柴米油盐的温馨烟火，也有星辰大海的浪漫诗意，携手同行，岁岁皆安，白头偕老，永远幸福🥰!",
+            wyj:"永结同心在今日，共结连理在今朝，华堂锦屋证佳偶，一生一世共白头，送我祝福给老师，千言万语不嫌长，🐏祝新婚快乐!🌼",
+            jyh:"萍姐萍姐，我是冀禹豪，没想到这么快萍姐就迎来了自己的婚姻👰，还记得高一的时候萍姐的名字就已经如雷贯耳了！其实我感觉我和您可有缘分了（可能您没觉得什么~），我当时高一在159班的时候就天天往156班跑，因为当时喜欢您班的沈叙含（可不要抓我非触啊）嘻嘻。到了184班是对子班，您实在是太强了，我们班输了一个学期，到了高三您当了我的班主任，很感谢您对我的看好，当时给了我超大的鼓舞—👍—虽然后来因为人员调动，您到了其他班，只成为了我们的政治老师，但我在心里一直对您又惧又爱。 现在想想，高中三年您几乎从未缺席我的生活与学习，我觉得这缘分超奇妙哈哈哈！三年转瞬即逝，您对人生的叮嘱、对教学的较真、对学生的负责，都深深烙印在我往后的路上🐏。您热情激昂的课堂、对知识点鞭辟入里的解读☀，到现在我都能清晰回想，高考时政治更是我考得最棒的一科呢✌✌✌！ 特别幸福也特别幸运能成为您的学生，您陪我们跨越了人生的关键节点，如今您也迎来了自己的重要时刻哈哈哈~ 👰，在这里真心恭喜萍姐爱情事业双丰收🥰，记得您说过一句话“人生像政治大题，要答到得分点”，现在您终于找到属于自己的“标准答案”啦 —— 愿往后每一天都像您讲“发展观”时那样，眼里有光☀，手里有糖🍬。新婚快乐啊萍姐",
+            cyx:"萍姐，新婚快乐！从知识的引路人到人生新旅程的启航者🐏，为您感到无比开心！愿老师的婚后生活充满欢笑与惊喜，柴米油盐皆是甜，朝朝暮暮皆倾心，往后余生，平安喜乐，爱意绵长！🥰",
+            fjl:"老师毕业也一年了蛮想您的，政治高考也取得了理想成绩，您对我的教导终身难忘。祝您工作愉快，阖家幸福🥰祝萍姐永远年轻漂亮!",
+            ysy:"您用严谨的逻辑与热忱的心🌳，让我爱上政治学科。愿您永远保持这份热忱，照亮更多学子的成长之路!☀",
+            lys:"李萍老师，你的政治讲的非常好，我进入高中的第一个班主任就是你，再次分班的时候，我还是在你的班级，我的心里当时非常开心，感谢你为我的高中生活添上了浓墨重彩的一笔，祝您新婚快乐👰，百年好合🥰",
+            hqk:"萍姐，由于一些原因并没有出现在婚礼上🎉，有点遗憾没有见证到最幸福的一刻，新婚之喜 ，永沐爱河🌌，幸福只是起点，只是开始，还在一直延续🌠，幸福ing!☀",
+            wyx:"to:萍姐  ⭐高中三年有一年半的时间都在你的班里，感谢您的教诲让我从刚开始一个敏感又爱哭的人变得逐渐好起来。在教学上您是严厉的，但在平时课下生活中您又对我们无微不至的关心。疫情在校的时候，在可以玩的几天您带着我们一块玩，真的很开心。我也在您的教导中体会到了政治的乐趣，这也进而影响我的大学专业，我选择了法学。最后在您结婚之际，我想祝您新婚快乐🥰，一定要开心幸福下去。您的背后还有一堆希望您幸福的学生。感恩有你!🌼",
+            zym:"萍姐，我是一曼，遇见你是在高二，当时听说你很有威严，第一次到你的班里还很害怕🥺，但是当时你把我叫出去后发现你也没有他们说的那么恐怖，但是慢慢的就适应了，高三你要走的时候，我还有点不情愿，感觉只有你惯着才能安心学习，你不当班主任之后，我慢慢的更多感受到的是你的责任，我高三一直感觉压力很大，每次去找你，你都会鼓励我安慰我🥺，我甚至依赖上了这一种感觉，感觉没有你一切都会变得很煎熬，当时高三知道你谈恋爱，我有时候也会想一定要去你的婚礼💒，但是你结婚那天跟我的考试备考撞了，也没能赶过去，但是还是希望你能幸福，开启人生的下一个阶段，也希望你能在工作中如鱼得水，生活幸福，爱你萍姐!",
+            zry:"to李老师：高山不移，碧水长流。感谢老师的谆谆教诲。祝新婚快乐🥰，工作顺利，万事顺遂，桃🍑满天下☁！",
+            lty:"李萍老师非常认真负责，很活泼开朗，不会内耗,祝老师幸福🥰!",
+            ybx:"祝老师：百年好合🍬，早生贵子🌼",
+            zzh:"萍萍姐，我今天才看到你在朋友发的邀请，我昨天才刚到家。啊啊啊，不能去见证你的幸福了。但是我也要送上我的祝福，祝萍萍姐新婚快乐🥰🥰，永远美丽，自信，勇敢大胆做自己🌼；您结婚之后，一定一定一定要更加开心，也一定一定一定要做自己，不要被婚姻所约束，要不断追寻更加完美的自己。同时，在工作上，也不要给自己太大压力。一定要开心，幸福哦，我们永远是你坚强的后盾🛡，我们永远爱你。漂亮的新娘👰，今天是你人生中最重要的时刻，真的很可惜，我们不能到现场去见证我们可爱的老师也是朋友的婚礼，但是，我们会永远站在你身后。最后，祝愿您和薛老师新婚快乐，永远幸福。婚礼应该快开始了，不要紧张哟，让大家去看见最美的萍萍姐。",
+            zy:"萍姐，高考已经结束快一年了，你也结了婚步入了婚姻的殿堂💒，希望以后的日子里可以幸福快乐🥰，老师，刚分到你的班的时候，第一眼就觉得老师你一定是一个严厉的老师，但是严师出高徒，所以我是幸运的，能成为你的学生，你特别认真负责任，在高一的时候我们考试次次胜利，少不了你的辛苦负责，认真备课，我们的现在少不了老师你的辛苦付出，希望以后萍姐永远年轻漂亮开心快乐❤!",
+            yyh:"结婚不是终点站，该干的活还得干🙂",
+            gjy:"李萍老师~哈哈哈哈两年不见了，先祝您新婚快乐以后的每一天睁眼就是爱与希望🐏，现在回想当年的高一高二生活，李萍老师，您是一个严厉的老师，又是一个负责，带领班级上进的老师，现在的我回过头来看，高一的我对你畏惧，成绩也很稳定，高二属实真的有点叛逆了这种心理带来的背后确实是成绩的波折与下降，（可当时的自己真的做错了，自己没遵守纪律反过来怪你的严格）高一高二的两年，作为政治老师的你，将每一个知识点一遍遍的提问，严格卡好每个人，带来的是高三政治基础知识的夯实，换来高考考场政治的稳定发挥，哈哈哈哈哈哈～对萍姐感情，由高二不解到高考完的释然🌼，到现在的感激，慢慢长大，感情慢慢发酵，感谢遇到了您，也幸好有您，谢谢祝萍姐有着踏实，奋进的生活🎇🎇",
+            hym:"您不仅是知识的传授者，更是我们成长道路上的引路人🍬。时刻关注我们的学习状态和心理变化，在我们遇到困难时，耐心开导、积极鼓励；在取得成绩时，给予真诚的赞扬和合理的建议，让我们感受到温暖与信任🔅。",
+            wzt:"从三尺讲台的谆谆教诲，到人生新阶段的甜蜜启航，您始终是我们心中最温暖的引路人🐏。萍姐愿您的婚姻像精心备课的教案般完美，像批改作业的红笔🖊般热烈，往后岁岁年年，皆是温柔与偏爱!🌼",
+            fmy:"当我驻足路旁🌳，回望来时路，总有几缕风儿从远方捎来讯息，其中的记忆足以超越时空的围捕，显得珍贵无比。定能想起，同样是清晨的吹拂下，与此刻的宁静不同的是，当年的激情响彻每一缕曦光☀；必会忆起，同样是烈阳的照耀下，比如今的内敛不同的是，彼时的少年迎击每一丝不甘；自可思及，同样是夜影的注视下，较现下的轻松不同的是，曾经的黑夜记录着每一场狂飙。“舞象之年能有这样的经历，不得不教人难忘”，随着路旁景色不断倒退，路途中的旅人想必仍然记得那个持续耕耘的身影，和那些如同远处影影绰绰的农屋一般朦胧梦幻的经历。⭐",
+            wjr:"老师好，虽然您只在高二教了我一年，但是您讲课的激情比食堂开饭还令我记忆深刻（嘻嘻jpg.）您宽严相济，虽然总是怕被您提问，也抱怨过罚写🥺，但是我们都能感受到您的认真负责和勇于争先，老师辛苦啦🍬，祝老师接下来多喜乐长安宁岁无忧🌼",
+            wrx:"To  萍姐 :hello呀萍姐见字如面还记得我们第一次相遇是在157，那个时候其实我分班之前对你是比较害怕的🥺其他同学也开解我说你其实很好经过后来的相处觉得你不可怕，反而是一位非常非常负责的老师也非常喜欢你⭐，再悄悄告诉你哦老师，其实到了157之后，再加上我们的相处，我也渐渐的确定了我以后想要成为想你一样严慈并济的老师，一位负责，优秀的教师还记得我们宿舍那次那次违纪吗还有我和王雨轩翘二郎腿的那次违纪，哈哈哈哈哈都不好意思回忆了，你也并没有重罚我们你也会自掏腰包奖励我们❤，希望并帮助我们变得来越优秀，非常非常感谢您一直以来的付出现在您也遇到了自己的幸福☀，很遗憾因为课程原因我并不能到达婚礼现场见证你的幸福时刻，但还是祝您新婚👰快乐，永结同心，百年好合，工作顺利，身体健康，永远幸福！还有，萍姐你真的美爆了好吗！永保青春，一直美下去！⭐",
+            wzg:"萍姐！听到您新婚的喜讯🔈🔈，真心为您感到开心！高中三年，您当了我两次班主任受益匪浅，您表扬和批评我们时的语气我现在还能记着那些在知识海洋里并肩前行的日子🌳，至今想起来都格外温暖。在政治上真的非常感谢您，因为有您的悉心教导，我的政治成绩也不错，其实比起老师，您更像我们的朋友，就像我们平时叫的“萍姐”，真的像一个姐姐，还记得疫情期间，在学校待了三个月，您经常给我们买吃的，跟我们一起看电影 在操场玩耍🍬，所以即使三个月没回家，心里也没有很大落差，亦师亦友，不仅教知识，也教做人，您真的在尽力让我们减少青春的遗憾。如今看到您收获幸福，这份喜悦仿佛也有了我们青春的印记☀。愿您和爱人白首同心❤、岁岁欢愉，往后的每一天都被甜蜜与温柔环绕！得偿所愿🎉🎉🎉",
+            dsq:"萍姐，得知您结婚👰的消息超替您开心🍬！还记得高二时您在讲台上的严厉模样，每一个知识点都抠得细致入微，那时总觉得您“不近人情”🥺，后来才懂那些严苛里藏着对我们最深的期待。生活里您又像知心姐姐☀，点点滴滴都让我记到现在，如今我已经要上大二了，但是高中发生的一切都好像还在昨天，感谢你赠我的良好的学习习惯，感谢你赠我的高中的美好回忆，祝你工作顺利，事事顺心🔈🔈",
+            ygl:"第一次相遇是在高一的156班，我们一起度过漫长的军训生活，正式开启高中学习生活。还记得当时因为疫情，我们没办法放假，是你每节自习课都叫同学出去，用你的手机给家里打视频电话，直到所有同学都打完一遍。有一次晚上熄灯后，我在床上偷偷吃糖，被当时的主任索瑞明发现了，你也没怪我，笑着说让我以后别这样就没事了。那时我就知道，表面严厉的萍姐，对我们也有温柔的一面💕。分班那天是周日，上午还在周测，下午刚到教室就说要分班。你在念几个同学分到哪个班后，念不下去了，让石憬源接着念，自己躲到一旁偷偷掉眼泪💧。我以为我们以后没有交集，很幸运高二分班，分到了157班，又到了你班里学了一年。在萍姐你严厉的管理下，我的成绩也有了很大的进步，真的很感谢在高中时期能遇到您这么负责的老师🙏！最后，祝萍姐和薛老师新婚快乐🎉！往后的日子天天甜甜蜜蜜，眼里总闪着开心的光✨",
+            zyh:"萍姐好🫡，时光匆匆，才想起来作为您的学生已经是两年前了，那时您给我的第一印象是严，常常批我们，那时心多少有点不舒服😅，但是离开了您之后，才慢慢察觉当您的学生最能鞭挞我前进，你是为了我们好才批我们的，也真因为您我们才能在那时一直作为优秀班级。三尺讲台，您用智慧播种希望；四季耕耘，您以耐心浇灌成长。您总能发现每个学生的闪光点，用鼓励点燃我们的热情。这份亦师亦友的温暖，永远是我青春里最珍贵的记忆。现在我们已经毕业，各奔东西，我也常常怀念我们和萍姐一起日子，祝愿萍姐永葆青春美丽，教出一届又一届优秀学子，也祝萍姐婚姻辛福😀为萍姐举大旗",
+        }
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = 4 + Math.random() * 2 + "s"; // 4-6秒降落
+            heart.style.opacity = Math.random() * 0.8 + 0.2; // 随机透明度
+
+            // SVG 作为爱心图形
+            heart.innerHTML = `
+            <svg viewBox="0 0 32 29.6" width="20" height="20" fill="pink">
+                <path d="M23.6,0c-3.4,0-6.4,2.2-7.6,5.3C14.8,2.2,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4
+                c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+            `;
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+            heart.remove();
+            }, 6000); // 删除节点
+        }
+        setInterval(createHeart, 20); // 每20ms生成一个
+
+        const clickedButtons = new Set();
+
+        function handleClick(button) {
+            const key = button.getAttribute('data-key');
+            const message = messages[key];
+
+            // 显示弹窗
+            document.getElementById('alertMessage').innerText = message;
+            document.querySelector('#alertBox button').innerText = "幸福+1";
+            document.getElementById('customAlert').style.display = 'flex';
+
+            // 标记已点击
+            clickedButtons.add(key);
+
+                // 每次点击都检查是否所有按钮都点过
+                checkAllButtonsClicked();
+        }
+
+        function closeAlert() {
+            document.getElementById('customAlert').style.display = 'none';
+        }
+
+        function checkAllButtonsClicked() {
+            const allButtons = document.querySelectorAll('.floating-buttons button');
+            const totalKeys = new Set(Array.from(allButtons).map(btn => btn.getAttribute('data-key')));
+            
+            if (clickedButtons.size === totalKeys.size) {
+                setTimeout(() => {
+                    window.location.href = "4.html";
+                }, 1000); // 跳转前给用户1秒时间看到最后的弹窗
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            // 当用户点击页面任意地方，开始播放背景音乐
+            document.body.addEventListener('click', function () {
+            const bgm = document.getElementById('bgm');
+            if (bgm) {
+                bgm.play().catch((e) => {
+                console.log("播放失败：", e);
+                });
+            }
+            }, { once: true }); // 确保只执行一次
+        });
+
+    </script>
+      
+</body>
+</html>

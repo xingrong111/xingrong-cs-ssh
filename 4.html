@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>萍姐薛老师幸福旅途</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      background: url("images/bei2.jpg") no-repeat center;
+      font-family: 'Permanent Marker', cursive;
+      background-size: cover;
+      overflow: hidden;
+      position: relative; /* 为绝对定位提供参考*/
+    }
+    /* 文字容器：设置偏移 */
+    .text-wrap {
+        position: relative;
+        z-index: 10;
+        /* 让内部文字水平居中*/
+        text-align: center; 
+        padding-top: 15vh;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+    .centered-text {
+        font-size: clamp(2rem, 8vw, 5rem);
+        color: #fff;
+        text-shadow: 0 0 10px #ff7eb9, 0 0 20px #ff7eb9;
+        animation: breathe 4s ease-in-out infinite;
+        margin-bottom: 5vh;
+        position: relative;
+        display: inline-block;
+    }
+    /* 按钮组容器：相对于文字容器定位 */
+    .button-group {
+      display: flex;
+      flex-direction: column; 
+      align-items: center; /* 按钮水平居中 */
+      gap: 30px; /* 按钮之间的垂直间隔 */
+      z-index: 10;
+      margin-top: 2vh;
+    }
+    button {
+      width: clamp(180px, 20vw, 240px);
+      height: clamp(50px, 6vw, 74px);
+      padding: 10px 20px;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: plum;
+      font-family: 'Permanent Marker', cursive;
+      animation: breathe 2s ease-in-out infinite;
+      border-radius: 25px; 
+      background-color: #ff7eb9;
+      color: pink;
+      border: 2px solid #ff7eb9;
+      box-shadow: 0 0 10px rgb(26, 13, 15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    button:hover{
+        transform: scale(1.1);
+        box-shadow: 0 0 20px pink;
+    }
+    .image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+    }
+    .floating-image {
+        position: absolute;
+        width: clamp(100px, 12vw, 180px);
+        height: clamp(100px, 12vw, 180px);
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        animation: fadeIn 0.5s ease-out forwards, float 6s ease-in-out infinite;
+        pointer-events: auto;
+        transition: all 0.3s ease;
+        opacity: 0;
+    }
+    .floating-image:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
+    .ping-image {
+        border: 3px solid #ff7eb9;
+    }
+    .xue-image {
+        border: 3px solid #9e7eb9;
+    }
+
+    span{
+        /*使span元素相对于最近的已定位祖先元素（.container）进行绝对定位*/
+        position:absolute;
+        /*将span元素的左上角定位到.container元素的正中间*/
+        top:50%;
+        left:50%;
+        /*设置span元素的宽度和高度为4像素*/
+        width: 4px;
+        height: 4px;
+        /*背景颜色*/
+        background-color: #fff;
+        /*span边框半径设置为50%，使其呈现圆形*/
+        border-radius: 50%;
+        /*添加发光效果*/
+        box-shadow: 0 0 0 4px rgba(255,255,255,0.1),
+        0 0 0 8px rgba(255,255,255,0.1),
+        0 0 20px rgba(255,255,255,1);
+        /*设置动画，动画名称为animate,时长为3秒，线性，无限次循环播放*/
+        animation: animate 3s linear infinite;
+    }
+
+    /*拖尾效果*/
+    span::before{
+        /*伪元素内容为空*/
+        content: "";
+        /*使伪元素相对于span元素进行绝对定位*/
+        position:absolute;
+        /*将伪元素在垂直方向上居中显示*/
+        top: 50%;
+        transform:translateY(-50%);
+        /*设置伪元素的宽度和高度*/
+        width: 300px;
+        height: 3px;
+        /*设置伪元素的背景为水平方向的线性渐变，从白色渐变到透明。*/
+        background: linear-gradient(90deg, pink, transparent);
+    }
+
+    /*接下来分别为每个流星设置位置、动画延迟时间、动画时长*/
+    span:nth-child(1){
+        top:0;
+        right: 0;
+        /*initial关键字用于设置CSS属性为它的初始值*/
+        left: initial;
+        /*动画延迟时间*/
+        animation-delay: 0s;
+        /*动画时长*/
+        animation-duration: 1s;
+    }
+
+    span:nth-child(2){
+        top:0;
+        right: 80px;
+        left: initial;
+        animation-delay: 0.2s;
+        animation-duration: 3s;
+    }
+
+    span:nth-child(3){
+        top:80px;
+        right: 0;
+        left: initial;
+        animation-delay: 0.4s;
+        animation-duration: 2s;
+    }
+
+    span:nth-child(4){
+        top:0;
+        right: 180px;
+        left: initial;
+        animation-delay: 0.6s;
+        animation-duration: 1.5s;
+    }
+
+    span:nth-child(5){
+        top:0;
+        right: 400px;
+        left: initial;
+        animation-delay: 0.8s;
+        animation-duration: 2.5s;
+    }
+
+    span:nth-child(6){
+        top:0;
+        right: 600px;
+        left: initial;
+        animation-delay: 1s;
+        animation-duration: 3s;
+    }
+
+    span:nth-child(7){
+        top:300px;
+        right: 0;
+        left: initial;
+        animation-delay: 1.2s;
+        animation-duration: 1.75s;
+    }
+
+    span:nth-child(8){
+        top:0;
+        right: 700px;
+        left: initial;
+        right: 0;
+        left: 700px;
+        animation-delay: 1.4s;
+        animation-duration: 1.25s;
+    }
+
+    span:nth-child(9){
+        top:0;
+        right: 1000px;
+        left: initial;
+        animation-delay: 0.75s;
+        animation-duration: 2.25s;
+    }
+
+    span:nth-child(10){
+        top:0;
+        right: 450px;
+        left: initial;
+        animation-delay: 2.75s;
+        animation-duration: 2.25s;
+    }
+    span:nth-child(11){
+        top:600px;
+        right: 0;
+        left: 400px;
+        animation-delay: 2s;
+        animation-duration: 1.75s;
+    }
+    span:nth-child(12){
+        top:600px;
+        right: 0;
+        left: 700px;
+        animation-delay: 1.25s;
+        animation-duration: 2s;
+    }
+    span:nth-child(13){
+        top:600px;
+        right: 0;
+        left: 1000px;
+        animation-delay: 2.75s;
+        animation-duration: 2.25s;
+    }
+    span:nth-child(14){
+        top:600px;
+        right: 0;
+        left: 600px;
+        animation-delay: 0.75s;
+        animation-duration: 2s;
+    }
+
+    /*定义动画*/
+    /*背景缩放动画*/
+    @keyframes animateBg{  /*定义名为animateBg的动画*/
+        0%, 100%{ /*在画面开始0%和结束100%时，背景图像的缩放比例为1*/
+            transform: scale(1);
+        }
+        50%{  /*在画面进行到50%时，背景图像的缩放比例为1.2*/
+            transform: scale(1.2);
+        }
+    }
+
+    /*流星划过动画*/
+    @keyframes animate{
+        0%{  /*在动画开始时（0%），span元素旋转315°，水平位移为0，透明度为1*/
+            transform: rotate(315deg) translateX(0);
+            opacity: 1;
+        }
+        90%{/*在动画进行到90%时，span元素的透明度为1*/
+            opacity: 1;
+        }
+        100%{/*在动画结束时（100%）span元素旋转315°，水平向左位移为1000px，透明度为0，实现流行划过的效果*/
+            transform: rotate(315deg) translateX(-1000px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes breathe {
+      0%, 100% { 
+        transform: scale(1); 
+        opacity: 1; 
+      }
+      50% { 
+        transform: scale(1.05); 
+        opacity: 0.9; 
+      }
+    }
+    @keyframes fadeIn {
+        from{
+            opacity: 0;
+            transform: scale(0.8);
+        }        
+        to{
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    @keyframes float{
+        0%, 100%{
+            transform: translateY(0) rotate(0deg);
+        }
+        25%{
+            transform: translateY(-10px) rotate(2deg);
+        }
+        75%{
+            transform: translateY(10px) rotate(-2deg);
+        }        
+    }
+    @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 10px pink; }
+        50% { box-shadow: 0 0 20px pink, 0 0 30px rgba(255, 126, 185, 0.6); }
+    }
+
+    /* 庆祝效果 */
+    .celebration {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 20;
+        display: none;
+    }
+    .particle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    /* 计数器样式 */
+    .counter {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        z-index: 15;
+    }
+    /*自定义粉色弹窗*/
+    #customAlert {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 192, 203, 0.5); /* 粉色透明背景 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+    }
+
+    .custom-alert-box {
+        background-color: pink;
+        color: #fff;
+        padding: 30px 40px;
+        border-radius: 20px;
+        font-size: 1.5rem;
+        text-align: center;
+        box-shadow: 0 0 20px #ff7eb9;
+        animation: breathe 1s ease-in-out infinite;
+    }
+
+    .custom-alert-box button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border: none;
+        background-color: #ff7eb9;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+  </style>
+  <!-- 引入字体（如果需要） -->
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+  <audio id="bgm" src="mp3/music.mp3" autoplay loop></audio>
+</head>
+<body>
+  <!-- 文字容器：控制文字偏移 -->
+  <div class="text-wrap">
+    <div class="centered-text">
+      <p>萍姐薛老师幸福</p>
+    </div>
+    <!-- 按钮组：放在文字容器内，方便相对定位 -->
+    <div class="button-group">
+      <button onclick="addPingImage()">萍姐最幸福</button>
+      <button onclick="addXueImage()">薛老师更幸福</button>
+    </div>
+  </div>
+
+  <div class="image-container" id="imageContainer"></div>
+  <div class="celebration" id="celebration"></div>
+
+  <!-- 原有的 .container 保持不变（如果需要流星等效果） -->
+  <div class="container">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <script>
+    const pingImages = [
+      "images/xue1.jpg",
+      "images/xue2.jpg",
+      "images/xue3.jpg",
+      "images/xue4.jpg",
+      "images/xue5.jpg",
+      "images/xue6.jpg",
+      "images/xue7.jpg",
+      "images/xue8.jpg",
+      "images/xue9.jpg",
+      "images/xue10.jpg",
+      "images/xue11.jpg",
+      "images/xue12.jpg",
+      "images/xue13.jpg",
+      "images/xue14.jpg"
+
+    ];
+    const xueImages = [
+      "images/ping1.jpg",
+      "images/ping2.jpg",
+      "images/ping3.jpg",
+      "images/ping4.jpg",
+      "images/ping5.jpg",
+      "images/ping6.jpg",
+      "images/ping7.jpg",
+      "images/ping8.jpg",
+      "images/ping9.jpg",
+      "images/ping10.jpg",
+      "images/ping11.jpg",
+      "images/ping12.jpg",
+      "images/ping13.jpg",
+      "images/ping14.jpg",
+    ];
+    let pingCount = 0;
+    let xueCount = 0;
+  
+    const usedPingImages = new Set();
+    const usedXueImages = new Set();
+    const placedPositions = [];
+  
+    function getTextArea() {
+      const textElement = document.querySelector('.text-wrap');
+      const rect = textElement.getBoundingClientRect();
+      return {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+        right: rect.right,
+        bottom: rect.bottom,
+      };
+    }
+  
+    function isOverlapping(x, y, size) {
+      const padding = 10;
+      for (const pos of placedPositions) {
+        const dx = Math.abs(pos.x - x);
+        const dy = Math.abs(pos.y - y);
+        if (dx < size + padding && dy < size + padding) return true;
+      }
+      const text = getTextArea();
+      const inTextArea =
+        x + size > text.left &&
+        x < text.right &&
+        y + size > text.top &&
+        y < text.bottom;
+      return inTextArea;
+    }
+  
+    function addImage(imagesArray, isPing) {
+        const container = document.getElementById('imageContainer');
+        const img = document.createElement('img');
+        img.className = `floating-image ${isPing ? 'ping-image' : 'xue-image'}`;
+
+        let randomIndex;
+        const usedSet = isPing ? usedPingImages : usedXueImages;
+        if (usedSet.size >= imagesArray.length) usedSet.clear();
+        do {
+            randomIndex = Math.floor(Math.random() * imagesArray.length);
+        } while (usedSet.has(randomIndex));
+        usedSet.add(randomIndex);
+        img.src = imagesArray[randomIndex];
+
+        const imgSize = 150;
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const padding = 20;
+
+        let x, y, attempts = 0;
+        let overlap = true;
+
+        const text = getTextArea();
+
+    while (overlap && attempts < 200) {
+        attempts++;
+        x = Math.floor(Math.random() * (screenWidth - imgSize));
+        y = Math.floor(Math.random() * (screenHeight - imgSize));
+
+        // 检查是否在中央文字区域
+        const inTextArea = (
+        x + imgSize > text.left - padding &&
+        x < text.right + padding &&
+        y + imgSize > text.top - padding &&
+        y < text.bottom + padding
+        );
+
+        if (inTextArea) continue;
+
+        // 检查与已有图片是否重叠
+        const noOverlap = placedPositions.every(pos => {
+        const dx = Math.abs(pos.x - x);
+        const dy = Math.abs(pos.y - y);
+        return dx > imgSize && dy > imgSize;
+        });
+
+            if (noOverlap) overlap = false;
+        }
+
+        img.style.left = `${x}px`;
+        img.style.top = `${y}px`;
+
+        img.onclick = function () {
+            img.style.animation = 'fadeOut 0.5s ease-out forwards';
+            setTimeout(() => container.removeChild(img), 500);
+        };
+
+        container.appendChild(img);
+        placedPositions.push({ x, y });
+
+        if (isPing) pingCount++;
+        else xueCount++;
+        }
+
+        function addPingImage() {
+            if (pingCount < 15) addImage(pingImages, true);
+            if (pingCount >= 14 && xueCount >= 14 && !alerted) {
+                showCustomAlert();
+                alerted = true;
+            }
+
+        }
+    
+        function addXueImage() {
+            if (xueCount < 15) addImage(xueImages, false);
+            if (pingCount >= 14 && xueCount >= 14 && !alerted) {
+                showCustomAlert();
+                alerted = true;
+            }
+
+        }
+        let alerted = false;
+
+        function showCustomAlert() {
+            document.getElementById("customAlert").style.display = "flex";
+        }   
+
+        function closeCustomAlert() {
+            document.getElementById("customAlert").style.display = "none";
+            window.location.href = "5.html";
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            // 当用户点击页面任意地方，开始播放背景音乐
+            document.body.addEventListener('click', function () {
+            const bgm = document.getElementById('bgm');
+            if (bgm) {
+                bgm.play().catch((e) => {
+                console.log("播放失败：", e);
+                });
+            }
+            }, { once: true }); // 确保只执行一次
+        });
+
+    </script> 
+    <div id="customAlert" style="display: none;">
+        <div class="custom-alert-box">
+          幸福开启倍速，甜蜜指数爆表！即将进入幸福下一站！
+          <br>
+          <button onclick="closeCustomAlert()">幸福前进！🐋🌼🌠</button>
+        </div>
+      </div>
+      
+    
+    </body>
+    </html>
